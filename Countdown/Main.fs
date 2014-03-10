@@ -40,9 +40,6 @@ let toPair list =
     | x::y::[] -> x,y
     | _ -> failwith "no"
 
-let ordered (x,y) =
-    if x >= y then x,y else y,x
-
 let rec generateOperators (x,y) =
     if eval x < eval y then generateOperators (y, x)
     else seq {
