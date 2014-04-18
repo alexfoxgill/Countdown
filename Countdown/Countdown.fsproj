@@ -42,6 +42,8 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Numbers.fs" />
+    <Compile Include="Words.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <PropertyGroup>
