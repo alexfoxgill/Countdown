@@ -14,18 +14,35 @@ let main args =
         |> Words.trie
 
     let numbers () =
-        printfn "Enter the six numbers: "
-        let a = Console.ReadLine() |> int32
-        let b = Console.ReadLine() |> int32
-        let c = Console.ReadLine() |> int32
-        let d = Console.ReadLine() |> int32
-        let e = Console.ReadLine() |> int32
-        let f = Console.ReadLine() |> int32
-        printfn "Now enter the target: "
-        let target = Console.ReadLine() |> int32
-        let expression,result = Numbers.compute target [a; b; c; d; e; f]
-        printfn "Result: %s = %d" expression result 
-        Console.ReadLine()
+        let parseInt str =
+            match Int32.TryParse str with
+            | true, i -> Some i
+            | _ -> None
+    
+        let rec getNumbers () =
+            printfn "Enter the numbers separated by a space:"
+            let numbers = Console.ReadLine().Split [|' '|] |> Seq.choose parseInt |> List.ofSeq
+            match numbers with
+            | [] -> printfn "Please try again"
+                    getNumbers ()
+            | n  -> printfn "Numbers are: %A" n
+                    n
+
+        let rec getTarget () =
+            printfn "Now enter the target:"
+            match Console.ReadLine () |> parseInt with
+            | Some t -> printfn "Target is %A" t
+                        t
+            | None   -> printfn "Please try again"
+                        getTarget ()
+
+        let numbers = getNumbers ()
+        let target = getTarget ()
+        let result = Numbers.compute numbers target
+        if Numbers.eval result = target then
+            printfn "It's a match! %s" (Numbers.write result)
+        else
+            printfn "Not quite... %s" (Numbers.write result)
 
     let words () =
         printfn "Enter the nine letters below: "
