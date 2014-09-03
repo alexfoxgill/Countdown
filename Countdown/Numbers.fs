@@ -15,14 +15,16 @@ let rec eval = function
 | Divide (x, y)   -> eval x / eval y
 
 // string representation of an expression, with evaluated result
-let write n =
-    let rec write' = function
-    | Number x        -> x.ToString()
-    | Add (x, y)      -> "(" + write' x + " + " + write' y + ")"
-    | Subtract (x, y) -> "(" + write' x + " - " + write' y + ")"
-    | Multiply (x, y) -> "(" + write' x + " * " + write' y + ")"
-    | Divide (x, y)   -> "(" + write' x + " / " + write' y + ")"
-    write' n + " = " + (eval n).ToString()
+let write expr =
+    let rec write' expr =
+        let writeOp op x y = sprintf "(%s %s %s)" (write' x) op (write' y)
+        match expr with
+        | Number x        -> x.ToString()
+        | Add (x, y)      -> writeOp "+" x y
+        | Subtract (x, y) -> writeOp "-" x y
+        | Multiply (x, y) -> writeOp "*" x y
+        | Divide (x, y)   -> writeOp "/" x y
+    write' expr + " = " + (eval expr).ToString()
 
 let generate exprs =
     // for two given expressions, get possible combinations
