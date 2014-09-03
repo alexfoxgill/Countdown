@@ -35,8 +35,8 @@ let generate exprs =
             
         let a,b = if eval x > eval y then x,y else y,x
         seq {
-            yield Multiply (x, y)
-            yield Add (x, y)
+            yield Multiply(x, y)
+            yield Add(x, y)
             yield Subtract(a, b) // don't bother with negatives
             if isDivisible a b
                 then yield Divide(a, b)
@@ -55,7 +55,7 @@ let generate exprs =
 
 
 let compute numbers target =
-    let distance = eval >> ((-) target) >> abs
+    let distance = eval >> (-) target >> abs
     let fitness = Seq.map distance >> Seq.min
 
     let iterate =
@@ -65,8 +65,8 @@ let compute numbers target =
     let rec compute' candidates =
         let first = Seq.head candidates
         match first, fitness first with
-        | x::[], _  -> x // no more iterations, this is the best one
-        | exprs,  0 -> Seq.minBy distance exprs // woop, got it - now find which expression met the criteria
-        | _         -> candidates |> iterate |> compute'
+        | x::[], _ -> x // no more iterations, this is the best one
+        | exprs, 0 -> List.minBy distance exprs // woop, got it - now find which expression met the criteria
+        | _        -> candidates |> iterate |> compute'
     seq { yield numbers |> List.map Number }
     |> compute'
