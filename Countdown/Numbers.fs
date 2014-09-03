@@ -33,7 +33,7 @@ let generate exprs =
             let denom = eval y
             denom <> 0 && eval x % denom = 0
             
-        let a,b = if x > y then x,y else y,x
+        let a,b = if eval x > eval y then x,y else y,x
         seq {
             yield Multiply (x, y)
             yield Add (x, y)
